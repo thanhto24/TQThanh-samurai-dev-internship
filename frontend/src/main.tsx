@@ -5,15 +5,20 @@ import './index.css'
 import App from './App.tsx'
 import SigninPage from './pages/signin.tsx'
 import SignupPage from './pages/signup.tsx'
+import { ThemeProvider } from './components/theme-provider.tsx';
+import { ModeToggle } from './components/mode-toggle.tsx';
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/signin" element={<SigninPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-      </Routes>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/signin" element={<SigninPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+        <ModeToggle />
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 )
