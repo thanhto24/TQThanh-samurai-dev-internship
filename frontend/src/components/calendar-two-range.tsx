@@ -7,8 +7,9 @@ import { Calendar } from "@/components/ui/calendar"
 
 export default function HomeCalendar() {
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
-    from: new Date(2025, 5, 12),
-    to: new Date(2025, 6, 15),
+    // 30 days ago
+    from: new Date(new Date().setDate(new Date().getDate() - 30)),
+    to: new Date()
   })
 
   return (

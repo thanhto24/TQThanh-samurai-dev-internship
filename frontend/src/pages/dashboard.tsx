@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { HomeChart } from "@/components/home-chart"
+import ChartContainerHome from "@/components/chart-container"
 import DateRangeToolbar from "@/components/date-picker"
 import { addDays, format } from "date-fns"
 
@@ -66,11 +66,10 @@ export default function DashboardPage() {
       {/* Content */}
       <div className="flex-1 p-8">
         <DateRangeToolbar onRangeChange={handleRangeChange} />
-        <h1 className="mb-4 text-2xl font-bold">Dashboard</h1>
 
-        <div className="flex flex-col gap-8 w-full max-w-4xl">
-          <div className="w-full">
-            <HomeChart chartData={data} />
+        <div className="flex flex-col gap-8 w-full">
+          <div className="w-full p-6">
+            <ChartContainerHome chartData={data} />
           </div>
         </div>
       </div>

@@ -3,27 +3,18 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import type { ChartData } from "@/types/chart"
 
 
-const chartConfig = {
-    contact: {
-        label: "Contacts",
-        theme: {
-            light: "#2563eb",
-            dark: "#dc2626",
-        },
-    },
-} satisfies ChartConfig
-
-export function HomeChart({ chartData }: { chartData: { time_: string; contact: number }[] }) {
+export function HomeChart({ chartData, config }: { chartData: ChartData[], config: ChartConfig }) {
     return (
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <ChartContainer config={config} className="min-h-[200px] max-h-[400px] w-full px-2">
             <BarChart accessibilityLayer data={chartData}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                     dataKey="time_"
                     tickLine={false}
-                    tickMargin={10}
+                    tickMargin={16}
                     axisLine={false}
                     tickFormatter={(value) => {
                         const date = new Date(value) // value dạng "2025-09-25"
