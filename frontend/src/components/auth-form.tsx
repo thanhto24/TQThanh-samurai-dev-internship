@@ -11,7 +11,7 @@ import { PasswordInput } from "./password-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Mail, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface AuthFormProps extends React.ComponentProps<"div"> {
   type: "signin" | "signup";
@@ -19,6 +19,16 @@ interface AuthFormProps extends React.ComponentProps<"div"> {
 
 export function AuthForm({ type, className, ...props }: AuthFormProps) {
   const isSignup = type === "signup";
+  const navigate = useNavigate();
+
+  function handleSignin() {
+    console.log("Sign in button clicked");
+    navigate("/dashboard"); 
+  }
+
+  function handleSignup() {
+    console.log("Signup button clicked");
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -62,7 +72,23 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
             </div>
 
             <div className="flex flex-col gap-3">
-              <Button type="submit" className="w-full">{isSignup ? "Create Account" : "Sign in"}</Button>
+              {isSignup ? (
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleSignup}
+                >
+                  Create Account
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleSignin}
+                >
+                  Sign in
+                </Button>
+              )}
 
               <div className="relative flex items-center my-3">
                 <span className="flex-grow h-px bg-gray-300"></span>
