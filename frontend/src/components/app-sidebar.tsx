@@ -2,16 +2,11 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
+  Home,
+  Contact,
+  Settings,
+  Heart,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -29,129 +24,57 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "To Quoc Thanh",
+    email: "thanhtovntmk@gmail.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Full stack Intern",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Full stack Intern",
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      name: "Full stack Intern 2",
+      logo: GalleryVerticalEnd,
+      plan: "Full stack Intern 2",
     },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Favorites",
       url: "#",
-      icon: SquareTerminal,
+      icon: Heart,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Google",
           url: "#",
+          img_url: "/google-icon.svg",
         },
         {
-          title: "Starred",
+          title: "Microsoft",
           url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          img_url: "/microsoft-icon.svg",
         },
       ],
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Home",
       url: "#",
-      icon: Frame,
+      icon: Home,
     },
     {
-      name: "Sales & Marketing",
+      name: "Contacts",
       url: "#",
-      icon: PieChart,
+      icon: Contact,
     },
     {
-      name: "Travel",
+      name: "Settings",
       url: "#",
-      icon: Map,
+      icon: Settings,
     },
   ],
 }
@@ -163,8 +86,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

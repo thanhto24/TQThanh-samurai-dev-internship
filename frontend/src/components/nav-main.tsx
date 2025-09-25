@@ -27,12 +27,13 @@ export function NavMain({
     items?: {
       title: string
       url: string
+      img_url?: string
     }[]
   }[]
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel></SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -54,9 +55,13 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
+                        <div className="flex items-center gap-2">
+                          <img src={subItem.img_url} className="w-4 h-4" />
+                          <a href={subItem.url}>
+                            <span>{subItem.title}</span>
+                          </a>
+                        </div>
+
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

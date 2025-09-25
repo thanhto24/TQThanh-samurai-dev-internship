@@ -12,7 +12,7 @@ export function ModeToggle() {
   const { setTheme } = useTheme()
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 rounded-full bg-white dark:bg-gray-800 shadow-lg p-1">
+    <div className="fixed bottom-4 right-4 z-50 rounded-full bg-white dark:bg-gray-800 shadow-lg p-1">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
