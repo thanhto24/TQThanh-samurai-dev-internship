@@ -25,8 +25,12 @@ export function HomeChart({ chartData }: { chartData: { time_: string; contact: 
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
+                    tickFormatter={(value) => {
+                        const date = new Date(value) // value dạng "2025-09-25"
+                        const month = date.toLocaleString("en-US", { month: "short" }) 
+                        const day = date.getDate()
+                        return `${month} ${day}`
+                    }} />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar dataKey="contact" fill="var(--color-contact)" radius={4} />
             </BarChart>

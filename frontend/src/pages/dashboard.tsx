@@ -1,44 +1,79 @@
-import { HomeChart } from "@/components/home-chart";
-import { Button } from "@/components/ui/button"
+"use client"
+
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { HomeChart } from "@/components/home-chart"
+import DateRangeToolbar from "@/components/date-picker"
+import { addDays, format } from "date-fns"
 
+// Lưu data đã random theo ngày
+const generatedData: Record<string, number> = {}
 
-const data1 = [
-  { time_: "2025-09-19", contact: 120 },
-  { time_: "2025-09-20", contact: 200 },
-  { time_: "2025-09-21", contact: 150 },
-  { time_: "2025-09-22", contact: 80 },
-  { time_: "2025-09-23", contact: 190 },
-  { time_: "2025-09-24", contact: 240 },
-  { time_: "2025-09-25", contact: 300 },
-]
+function getRandomDataForDate(date: Date): number {
+  const key = format(date, "yyyy-MM-dd")
+  if (!(key in generatedData)) {
+    generatedData[key] = Math.floor(Math.random() * 10)
+  }
+  return generatedData[key]
+}
 
-const data2 = [
-  { time_: "January", contact: 100 },
-  { time_: "February", contact: 160 },
-  { time_: "March", contact: 90 },
-  { time_: "April", contact: 220 },
-  { time_: "May", contact: 130 },
-  { time_: "June", contact: 180 },
-  { time_: "July", contact: 250 },
-]
+function generateRangeData(from: Date, to: Date) {
+  const days: { time_: string; contact: number }[] = []
+  let current = new Date(from)
+
+  while (current <= to) {
+    const key = format(current, "yyyy-MM-dd")
+    days.push({
+      time_: key,
+      contact: getRandomDataForDate(current),
+    })
+    current = addDays(current, 1)
+  }
+
+  return days
+}
+
 export default function DashboardPage() {
-    const [data, setData] = useState(data1)
-    const [is1, setIs1] = useState(true)
+  const [data, setData] = useState<{ time_: string; contact: number }[]>([])
 
-    const toggleData = () => {
-        setData(is1 ? data2 : data1)
-        setIs1(!is1)
+  // callback nhận range từ DateRangeToolbar
+  const handleRangeChange = (range: { from?: Date; to?: Date } | undefined) => {
+    if (range?.from && range?.to) {
+      const newData = generateRangeData(range.from, range.to)
+      setData(newData)
+      console.log("Generated data:", newData)
+      console.log("Range:", range.from, "to", range.to)
     }
-    return (
-        <div className="p-8">
-            <h1 className="mb-4 text-2xl font-bold">Dashboard</h1>
-            <Button onClick={toggleData}>
-                Show {is1 ? "Data 1" : "Data 2"}
-            </Button>
-            <div className="w-full max-w-3xl">
-                <HomeChart chartData={data} />
-            </div>
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <div className="bg-muted w-64 p-4 flex flex-col">
+        <nav className="mt-4 space-y-2">
+          <Button variant="ghost" className="w-full justify-start">
+            Dashboard
+          </Button>
+          <Button variant="ghost" className="w-full justify-start">
+            Reports
+          </Button>
+          <Button variant="ghost" className="w-full justify-start">
+            Settings
+          </Button>
+        </nav>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-8">
+        <DateRangeToolbar onRangeChange={handleRangeChange} />
+        <h1 className="mb-4 text-2xl font-bold">Dashboard</h1>
+
+        <div className="flex flex-col gap-8 w-full max-w-4xl">
+          <div className="w-full">
+            <HomeChart chartData={data} />
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
