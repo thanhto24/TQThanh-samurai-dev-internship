@@ -1,31 +1,11 @@
 import { HomeChart } from "@/components/home-chart"
-import type { ChartData } from "@/types/chart"
 import { useState } from "react"
-import type { ChartConfig } from "./ui/chart"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-const peopleChartConfig = {
-    contact: {
-        label: "Contacts",
-        theme: {
-            light: "#dc2626",
-            dark: "#2563eb",
-        },
-    },
-} satisfies ChartConfig
 
-const companyChartConfig = {
-    contact: {
-        label: "Contacts",
-        theme: {
-            light: "#22c55e",
-            dark: "#16a34a",
-        },
-    },
-} satisfies ChartConfig
-
-export default function ChartContainerHome({ chartData }: { chartData: ChartData[] }) {
+export default function ChartContainerHome() {
     const [type, setType] = useState("people")
+    
     return (
         <div className="border rounded-lg shadow-sm">
             <div className="flex items-center justify-between h-16 border-b border-border">
@@ -54,11 +34,7 @@ export default function ChartContainerHome({ chartData }: { chartData: ChartData
             </div>
 
             <div className="p-4">
-                {type === "people" ? (
-                    <HomeChart chartData={chartData} config={peopleChartConfig} />
-                ) : (
-                    <HomeChart chartData={chartData} config={companyChartConfig} />
-                )}
+                <HomeChart chart_type={type} />
             </div>
         </div>
     )

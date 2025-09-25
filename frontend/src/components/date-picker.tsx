@@ -1,26 +1,26 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { type DateRange } from "react-day-picker"
 import { cn } from "@/lib/utils"
+import { useAppDispatch } from "@/lib/hooks"
+import { setRange } from "@/lib/features/chartSlice"
+import type { DateRange } from "react-day-picker"
 
 const presets = [
     { label: "1d", days: 1 },
-    { label: "3d", days: 3 },
     { label: "7d", days: 7 },
     { label: "30d", days: 30 },
 ]
 
-export default function DateRangeToolbar({ onRangeChange }: { onRangeChange?: (range: DateRange | undefined) => void }) {
-    const [range, setRange] = useState<DateRange | undefined>({
-        // from 30 days ago
+export default function DateRangeToolbar() {
+    const dispatch = useAppDispatch()
+    const [range, setLocalRange] = useState<DateRange | undefined>({
         from: new Date(new Date().setDate(new Date().getDate() - 30)),
-        // to today
         to: new Date(),
     })
     const [active, setActive] = useState<string>("30d")
@@ -28,21 +28,24 @@ export default function DateRangeToolbar({ onRangeChange }: { onRangeChange?: (r
     const setPreset = (label: string, days: number) => {
         const today = new Date()
         const from = new Date(today)
-        from.setDate(today.getDate() - (days - 1)) // lùi bớt ngày
-        setRange({ from, to: today })
-        onRangeChange?.({ from, to: today })
+        from.setDate(today.getDate() - (days - 1))
+        const newRange = { from, to: today }
+        setLocalRange(newRange)
+        dispatch(setRange({ from: from.toISOString(), to: today.toISOString() }))
         setActive(label)
     }
 
-    useEffect(() => {
-        if (range) {
-            onRangeChange?.(range)
+    const handleSelect = (selected: DateRange | undefined) => {
+        setLocalRange(selected)
+        if (selected?.from && selected?.to) {
+            dispatch(setRange({ from: selected.from.toISOString(), to: selected.to.toISOString() }))
         }
-    }, [])
+    }
 
+    
     return (
         <div className="flex items-center gap-2 border-b border-border p-2">
-            {/* Presets */}
+            {/* Preset buttons */}
             {presets.map((p) => (
                 <Button
                     key={p.label}
@@ -57,7 +60,6 @@ export default function DateRangeToolbar({ onRangeChange }: { onRangeChange?: (r
                     {p.label}
                 </Button>
             ))}
-
             <Button
                 variant="ghost"
                 size="sm"
@@ -69,8 +71,7 @@ export default function DateRangeToolbar({ onRangeChange }: { onRangeChange?: (r
             >
                 Custom
             </Button>
-
-            {/* Custom */}
+            {/* Custom calendar */}
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
@@ -102,11 +103,7 @@ export default function DateRangeToolbar({ onRangeChange }: { onRangeChange?: (r
                         mode="range"
                         defaultMonth={range?.from}
                         selected={range}
-                        onSelect={(newRange) => {
-                            setRange(newRange)
-                            setActive("Custom")
-                            onRangeChange?.(newRange)
-                        }}
+                        onSelect={handleSelect}
                         numberOfMonths={2}
                     />
                 </PopoverContent>
