@@ -1,8 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import { addDays, format } from "date-fns"
 
-type ChartPoint = { time_: string; contact: number }
-// Lưu từ/to dưới dạng string ISO để serializable
+type ChartPoint = { time_: string; contact: number; name: string[]}
 type DateRange = { from?: string; to?: string }
 
 interface ChartState {
@@ -11,14 +10,35 @@ interface ChartState {
   range: DateRange
 }
 
-const generatedData: Record<string, { people: number; company: number }> = {}
+// Mock names
+const peopleNames = ["Alice","Bob","Charlie","David","Eva","Frank","Grace","Hannah","Ian","Jane","Kevin","Lily","Mike","Nina","Oscar","Paul","Quinn","Rachel","Sam","Tina"]
+const companyNames = ["Acme Corp","Beta Ltd","Gamma Inc","Delta LLC","Epsilon Co","Zeta Group","Eta Solutions","Theta Tech","Iota Systems","Kappa Labs","Lambda Works","Mu Enterprises","Nu Dynamics","Xi Global","Omicron Partners","Pi Industries","Rho Services","Sigma Ventures","Tau Holdings","Upsilon Ltd"]
+
+const generatedData: Record<string, { people: ChartPoint; company: ChartPoint }> = {}
 
 function getRandomDataForDate(date: string) {
   if (!(date in generatedData)) {
-    generatedData[date] = {
-      people: Math.floor(Math.random() * 50),
-      company: Math.floor(Math.random() * 30),
+    // Random tổng số contact
+    const totalPeopleContact = Math.floor(Math.random() * 10) 
+    const totalCompanyContact = Math.floor(Math.random() * 5) 
+
+    // Random nguoi, cong ty contact
+    const shuffledPeople = peopleNames.sort(() => 0.5 - Math.random()).slice(0, totalPeopleContact)
+    const shuffledCompany = companyNames.sort(() => 0.5 - Math.random()).slice(0, totalCompanyContact)
+
+    const people: ChartPoint = {
+      name: shuffledPeople,
+      contact: totalPeopleContact,
+      time_: date
     }
+
+    const company: ChartPoint = {
+      name: shuffledCompany,
+      contact: totalCompanyContact,
+      time_: date
+    }
+
+    generatedData[date] = { people, company }
   }
   return generatedData[date]
 }
@@ -33,23 +53,20 @@ function generateRangeData(from: string, to: string) {
   while (current <= end) {
     const key = format(current, "yyyy-MM-dd")
     const { people: p, company: c } = getRandomDataForDate(key)
-    people.push({ time_: key, contact: p })
-    company.push({ time_: key, contact: c })
+    people.push(p)
+    company.push(c)
     current = addDays(current, 1)
   }
 
   return { people, company }
 }
 
-// Lưu ISO, không lưu Date object để tránh lỗi serializable
 const initialRange: DateRange = {
   from: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString(),
   to: new Date().toISOString(),
 }
 
-const initialData = initialRange.from && initialRange.to
-  ? generateRangeData(initialRange.from, initialRange.to)
-  : { people: [], company: [] }
+const initialData = generateRangeData(initialRange.from!, initialRange.to!)
 
 const initialState: ChartState = {
   peopleData: initialData.people,
