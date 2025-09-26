@@ -25,7 +25,7 @@ export function HomeChart({ chart_type }: { chart_type: string }) {
     const { peopleData, companyData } = useAppSelector(state => state.chart)
     const chartData = chart_type === "people" ? peopleData : companyData
     const config = chart_type === "people" ? chartConfigs.people : chartConfigs.company
-    console.log("Chart data:", chartData)
+    // console.log("Chart data:", chartData)
     return (
         <ChartContainer config={config} className="min-h-[200px] max-h-[400px] w-full px-2">
             <BarChart accessibilityLayer data={chartData}>

@@ -43,7 +43,7 @@ export default function DateRangeToolbar() {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-1 sm:gap-2 max-[430px]:w-1/2 border-b border-border w-full justify-start w-full h-12">
+    <div className="flex flex-wrap items-center gap-1 sm:gap-2 max-[430px]:w-1/2 max-[430px]:min-h-[5rem] border-b border-border w-full justify-start min-h-[3rem]">
       {presets.map((p) => (
         <Button
           key={p.label}

@@ -1,10 +1,12 @@
 import { HomeChart } from "@/components/home-chart"
 import { useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { useAppSelector } from "@/lib/hooks"
 
 export default function ChartContainerHome() {
   const [type, setType] = useState("people")
-
+  const { totalPeople, totalCompany } = useAppSelector(state => state.chart)
+  
   return (
     <div className="border rounded-lg shadow-sm w-full h-full flex flex-col">
       <div className="flex flex-col sm:flex-row sm:items-center border-b border-border">
@@ -23,10 +25,16 @@ export default function ChartContainerHome() {
             className="h-full w-full max-w-xs"
           >
             <ToggleGroupItem value="people" className="h-full text-xs sm:text-sm cursor-pointer">
-              People
+              <div className="flex flex-col items-center gap-1">
+                <span>People</span>
+                <span>{totalPeople}</span>
+              </div>
             </ToggleGroupItem>
             <ToggleGroupItem value="company" className="h-full text-xs sm:text-sm cursor-pointer">
-              Company
+              <div className="flex flex-col items-center gap-1">
+                <span>Company</span>
+                <span>{totalCompany}</span>
+              </div>
             </ToggleGroupItem>
           </ToggleGroup>
         </div>

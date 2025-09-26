@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { signinService, signupService, getCurrentUserService } from '../services/auth';
+import {
+  signinService,
+  signupService,
+  getCurrentUserService,
+} from '../services/auth';
 import { AuthRequest } from '../middleware/auth';
 
 // Health check
@@ -11,9 +15,15 @@ export const signup = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
     const token = await signupService(name, email, password);
-    res.json({ token });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.json({ message: 'Signup successful' });
   } catch (err: any) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -21,9 +31,15 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const token = await signinService(email, password);
-    res.json({ token });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.json({ message: 'Login successful' });
   } catch (err: any) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 

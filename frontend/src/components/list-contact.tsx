@@ -1,11 +1,11 @@
 import { useAppSelector } from "@/lib/hooks"
-
+import { Link } from "react-router-dom";
 type Contact = { name: string; contact: number }
 
 function ContactList({ title, contacts }: { title: string; contacts: Contact[] }) {
   return (
     <div className="border rounded-lg shadow-sm w-full max-w-full">
-      <div className="flex items-center justify-between  border-b border-border px-4">
+      <div className="flex items-center justify-between  border-b border-border p-4">
         <h2 className="text-lg font-semibold">{title}</h2>
       </div>
       <div className="p-4">
@@ -15,8 +15,10 @@ function ContactList({ title, contacts }: { title: string; contacts: Contact[] }
               key={idx}
               className="flex justify-between py-2 border-b border-border last:border-0 text-sm sm:text-base"
             >
-              <span>{c.name}</span>
-              <span className="font-semibold">{c.contact}</span>
+              <div className="flex items-center justify-between w-full">
+                <Link to="#" className="text-primary flex ">{c.name}</Link>
+                <span className="font-semibold">{c.contact}</span>
+              </div>
             </li>
           ))}
         </ul>
@@ -29,11 +31,11 @@ export function ListContact() {
   const { peopleData, companyData } = useAppSelector((state) => state.chart)
 
   const contactMap: Record<string, number> = {}
-  ;[...peopleData, ...companyData].forEach((dataPerDate) => {
-    dataPerDate.name.forEach((name) => {
-      contactMap[name] = (contactMap[name] || 0) + 1
+    ;[...peopleData, ...companyData].forEach((dataPerDate) => {
+      dataPerDate.name.forEach((name) => {
+        contactMap[name] = (contactMap[name] || 0) + 1
+      })
     })
-  })
 
   const contactList: Contact[] = Object.entries(contactMap)
     .map(([name, contact]) => ({ name, contact }))
