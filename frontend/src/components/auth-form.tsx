@@ -21,6 +21,7 @@ import { api } from "@/lib/api";
 // import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { ErrorMessage } from "@/components/error-message"
+import toast from "react-hot-toast";
 
 // --- Zod schemas ---
 const signinSchema = z.object({
@@ -61,9 +62,11 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
     try {
       await mutation.mutateAsync(data);
       if (isSignup) {
+        toast.success("Sign up successful! Please sign in.");
         navigate("/signin");
         return;
       }
+      toast.success("Welcome back!");
       navigate("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -133,13 +136,13 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
               )}
             </div>
 
-              {isSignup ? (
-                <Button type="submit" className="w-full" data-testid="signup-btn">Create Account</Button>
-              ) : (
-                <Button type="submit" className="w-full" data-testid="login-btn">Sign in</Button>
-              )}
+            {isSignup ? (
+              <Button type="submit" className="w-full" data-testid="signup-btn">Create Account</Button>
+            ) : (
+              <Button type="submit" className="w-full" data-testid="login-btn">Sign in</Button>
+            )}
 
-          
+
             <div className="mt-4 text-center text-sm">
               {isSignup ? (
                 <>Already have an account? <Link to="/signin" className="underline">Sign in</Link></>
