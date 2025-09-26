@@ -17,8 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { setUser } from "@/lib/features/userSlice";
-import { useDispatch } from "react-redux";
+// import { setUser } from "@/lib/features/userSlice";
+// import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { ErrorMessage } from "@/components/error-message"
 
@@ -50,17 +50,11 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
   const { register, handleSubmit, formState: { errors } } = form;
 
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const mutation = useMutation({
     mutationFn: (data: SigninFormData | SignupFormData) =>
       isSignup ? api.post("/auth/signup", data) : api.post("/auth/login", data),
-    onSuccess: async () => {
-      if (!isSignup) {
-        const { data: userData } = await api.get("/auth/me");
-        dispatch(setUser(userData));
-      }
-    },
   });
 
   const onSubmit = async (data: SigninFormData | SignupFormData) => {
