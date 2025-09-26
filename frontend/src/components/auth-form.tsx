@@ -19,6 +19,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { setUser } from "@/lib/features/userSlice";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { ErrorMessage } from "@/components/error-message"
 
 // --- Zod schemas ---
 const signinSchema = z.object({
@@ -40,6 +42,7 @@ interface AuthFormProps extends React.ComponentProps<"div"> {
 export function AuthForm({ type, className, ...props }: AuthFormProps) {
   const isSignup = type === "signup";
   const navigate = useNavigate();
+  const [error, setError] = useState("")
 
   const form = useForm<SigninFormData | SignupFormData>({
     resolver: zodResolver(isSignup ? signupSchema : signinSchema),
@@ -55,7 +58,7 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
     onSuccess: async () => {
       if (!isSignup) {
         const { data: userData } = await api.get("/auth/me");
-        dispatch(setUser(userData)); 
+        dispatch(setUser(userData));
       }
     },
   });
@@ -70,7 +73,7 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
       navigate("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      alert(err.response?.data?.message || "Something went wrong");
+      setError(err.response?.data?.message || "Something went wrong")
     }
   };
 
@@ -87,6 +90,7 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+            {error && <ErrorMessage message={error} />}
             {isSignup && (
               <div className="grid gap-3">
                 <Label htmlFor="name">Name</Label>
@@ -135,10 +139,13 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
               )}
             </div>
 
-            <Button type="submit" className="w-full" >
-              {isSignup ? "Create Account" : "Sign in"}
-            </Button>
+              {isSignup ? (
+                <Button type="submit" className="w-full" data-testid="signup-btn">Create Account</Button>
+              ) : (
+                <Button type="submit" className="w-full" data-testid="login-btn">Sign in</Button>
+              )}
 
+          
             <div className="mt-4 text-center text-sm">
               {isSignup ? (
                 <>Already have an account? <Link to="/signin" className="underline">Sign in</Link></>

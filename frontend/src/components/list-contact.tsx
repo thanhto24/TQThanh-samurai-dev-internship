@@ -15,10 +15,9 @@ function ContactList({ title, contacts }: { title: string; contacts: Contact[] }
               key={idx}
               className="flex justify-between py-2 border-b border-border last:border-0 text-sm sm:text-base"
             >
-              <div className="flex items-center justify-between w-full">
-                <Link to="#" className="text-primary flex ">{c.name}</Link>
+              <Link to="#" className="text-primary flex w-full items-center justify-between">{c.name}
                 <span className="font-semibold">{c.contact}</span>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>
